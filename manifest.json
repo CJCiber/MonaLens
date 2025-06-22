@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "description": "Captura el texto de imágenes",
+    "name": "TranslExt",
+    "version": "0.1",
+    "action":{
+        "default_popup":"index.html"
+    },
+    "web_accessible_resources": [
+    {
+        "resources": [
+        "tesseract/*"
+        ],
+        "matches": ["<all_urls>"]
+    }
+    ],
+	"content_security_policy": {
+        "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+    }
+}

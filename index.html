@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 300px; padding: 20px; }
+    #fileInput { margin: 10px 0; }
+    #result { margin-top: 10px; min-height: 100px; border: 1px solid #ccc; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h3>OCR Image to Text</h3>
+  <input type="file" id="fileInput" accept="image/*">
+  <div id="progress" style="display:none;">Processing...</div>
+  <div id="result"></div>
+  <script src="tesseract/tesseract.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
