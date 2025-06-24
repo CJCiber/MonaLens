@@ -21,13 +21,35 @@ async function createWorker(logger = (m) => {console.log(m);}) {
 	});
 }
 
+
 button.addEventListener('click', async function() {
   chrome.tabs.captureVisibleTab(null, { format: "png" }, async function(dataUrl) {
-      await chrome.storage.session.set({ screenCapture: dataUrl });
-      chrome.tabs.create({
-        url: chrome.runtime.getURL("capture.html"),
-        active: true
-      })
+    
+    async function openUniqueExtensionTab(filename) {
+      async function getCurrentTab() {
+        let queryOptions = { active: true, lastFocusedWindow: true };
+        let [tab] = await chrome.tabs.query(queryOptions);
+        return tab;
+      }
+      const extensionUrl = chrome.runtime.getURL(filename);
+
+      const [existingTab] = await chrome.tabs.query({url: extensionUrl});
+      if (existingTab)
+        await chrome.tabs.remove(existingTab.id);
+
+
+      const currentTab = await getCurrentTab();    
+        
+      await chrome.tabs.create({
+        url: extensionUrl, 
+        index: currentTab.index,  
+        active: true 
+      });
+
+    }
+    await chrome.storage.session.set({ screenCapture: dataUrl });
+    
+    await openUniqueExtensionTab("capture.html")
   });
 });
 
@@ -189,7 +211,11 @@ document.addEventListener('DOMContentLoaded', async function() {
   await createWorker();
   imagen = (await chrome.storage.session.get(['OCRImage'])).OCRImage;
   if (imagen){
-    preview.innerHTML = `<img src="${imagen}" width="200">`;
+    const img = document.createElement('img');
+    img.src = imagen;
+    img.style.width = "200";
+
+    preview.appendChild(img);
     await updateText();
   }
 });

@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "description": "Captura el texto de imágenes",
     "name": "TranslExt",
-    "version": "0.2",
+    "version": "0.2.1",
     "action":{
         "default_popup":"index.html"
     },
