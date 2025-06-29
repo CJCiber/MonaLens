@@ -2,7 +2,13 @@
     "manifest_version": 3,
     "description": "Captura el texto de imágenes",
     "name": "TranslExt",
-    "version": "0.2.1",
+    "version": "0.3.0",
+    "icons": {
+		"16": "images/dibujo16.png",
+		"32": "images/dibujo32.png",
+		"48": "images/dibujo48.png",
+		"128": "images/dibujo128.png"
+	},
     "action":{
         "default_popup":"index.html"
     },
