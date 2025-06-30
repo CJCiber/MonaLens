@@ -67,7 +67,8 @@ let LANGUAGES = {
 	Japanese: "jpn",
 	Korean: "kor",
 	Portuguese: "por",
-	Russian: "rus"
+	Russian: "rus",
+  Spanish: "spa"
 };
 function addLangSelector(){
   Object.keys(LANGUAGES).forEach(function (key) {
