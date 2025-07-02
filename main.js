@@ -6,6 +6,7 @@ let selectedLanguage = null;
 let worker = null;
 let imagen = null;
 
+
 async function createWorker(logger = (m) => {console.log(m);}) {
 	if (worker){
 		worker.terminate();
@@ -80,8 +81,16 @@ function addLangSelector(){
   
   langsel.value = selectedLanguage;
   langsel.addEventListener("change", async function () {
+    langsel.disabled = true;
     selectedLanguage = langsel.value;
+
     await chrome.storage.session.set({ lang: selectedLanguage });
+
+    if(imagen){
+      await createWorker();
+      await updateText();
+    }
+    langsel.disabled = false;
   });
 }
 
