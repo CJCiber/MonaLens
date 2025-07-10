@@ -1,19 +1,73 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <style>
-    body { width: 300px; padding: 20px; }
-    #fileInput { margin: 10px 0; }
-    #result { margin-top: 10px; min-height: 100px; border: 1px solid #ccc; padding: 10px; }
-  </style>
+  <link rel = "stylesheet" href="main-style.css">
 </head>
+
 <body>
-  <h3>OCR Image to Text</h3>
-  <button id="capture">Capturar</button>
-  <select id = "langsel"></select>
-  <div id="progress">Click "Capturar"</div>
-  <div id="result"></div>
+
+  <!-- Página principal -->
+  <div id="capturar">
+    <h2 style="text-align: center;">OCR Image to Text</h2>
+    <div class="fila-flex">
+      <div id="capture" class="container" style="padding: 25px; width: 59px; cursor: pointer;" title="Page capture">
+        <span class="gg-screenshot" style="display: inline-block; --ggs:2;"></span>
+      </div>
+      <div class="container" style="display: flex; align-items: center;
+  justify-content: center;">
+        <select id="langsel" style="display: inline-block; width: 120px; font-size: 16px; margin-top: 14px;"></select>
+      </div>
+    </div>
+    <div class="container" style="height: 100px; background-color: #f9f9f9;">
+      <img id="progress" src="images/arrow.png" style="max-height: 100px; max-width: 315px;">
+    </div>
+    <div class="container" style="background-color: #ddd;">
+      <div style="position: relative;">
+        <textarea id="result" placeholder="No image text to extract" readonly
+          style="min-height: 100px; background-color: #ddd; color: #3c4043"></textarea>
+
+        <div class="text-actions">
+          <img id="translate-button" class="action-icon" title="Translate"
+            style="width: 20px; height:20px; margin-right: 6px; cursor:pointer; display: none;"
+            src="images/languages.svg">
+          <img id="clipboard-button" class="action-icon" title="Copy to clipboard" style="width: 20px; height:20px; cursor:pointer;"
+            src="images/clipboard-copy.svg">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Página de traducciones -->
+  <div id="traducir" style="display: none;">
+    <div class="container big">
+      <label for="source-lang" style="font-size: 16px;">Translate extracted text</label>
+      <select id="source-lang" disabled>
+      </select>
+
+      <span class="gg-arrow-long-right" style="color: #999; display: inline-block;"></span>
+
+      <select id="target-lang">
+      </select>
+      <img src="images/dibujo48.png" style="
+      position: absolute;
+      right: 20px;
+      top: 50px;
+      transform: translateY(-30%);
+    ">
+    </div>
+
+    <div class="container">
+
+      <textarea id="source-text" placeholder="No text extracted, go back and click capture..."></textarea>
+    </div>
+    <div class="container" style="background-color: #ddd;">
+      <textarea id="translated-text" placeholder="Processing translation..." readonly style="background-color: #ddd; color: #3c4043"></textarea>
+    </div>
+  </div>
+
   <script src="tesseract/tesseract.min.js"></script>
   <script src="main.js"></script>
 </body>
+
 </html>
