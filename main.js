@@ -66,30 +66,31 @@ button.addEventListener('click', function() {
 
 
 
-let LANGUAGES = {
-	Arabic: "ara",
-	"Chinese - Simplified": "chi_sim",
-	"Chinese - Traditional": "chi_tra",
-	German: "deu",
-	English: "eng",
-	French: "fra",
-	Hindi: "hin",
-	Italian: "ita",
-	Japanese: "jpn",
-	Korean: "kor",
-	Portuguese: "por",
-	Russian: "rus",
-  Spanish: "spa"
+const LANGUAGES = {
+  ara: "ar",
+  rus: "ru",
+  hin: "hi",
+	"chi_sim" : "zh-Hans",
+	"chi_tra": "zh-Hant",
+  kor: "ko",
+  jpn: "ja",
+  spa: "es",
+  eng: "en",
+  deu:"de",
+	fra: "fr",
+	ita: "it",
+	por: "pt",
 };
-function addLangSelector(domsel, selection, fun){
+function addLangSelector(domsel, selection, fun, disabled = [], unicode_values = false){ //disabled y selection deben estar en el formato OCR
   Object.keys(LANGUAGES).forEach(function (key) {
 		let elem = document.createElement("option");
-		elem.value = LANGUAGES[key];
-    elem.textContent = key;
+		elem.value = unicode_values? LANGUAGES[key]:key;
+    elem.textContent = new Intl.DisplayNames([navigator.language], {type:'language'}).of(LANGUAGES[key]);
+    elem.disabled = disabled.includes(key); 
 		domsel.appendChild(elem);
   });
   
-  domsel.value = selection;
+  domsel.value = unicode_values? LANGUAGES[selection]:selection;
   domsel.addEventListener("change", fun);
 }
 async function eventMainSelector(){
@@ -106,10 +107,12 @@ async function eventMainSelector(){
   langsel.disabled = false;
 }
 async function eventTranslatorSelector(){
+  input_sel.disabled = true;
   targetLanguage = input_sel.value;
   
   await createTranslator();
   await updateTranslation();
+  input_sel.disabled = false;
 }
 
 
@@ -249,9 +252,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         popup.remove();
 
 
-      addLangSelector(input_sel, "spa", eventTranslatorSelector);
+      addLangSelector(input_sel, selectedLanguage=="eng"?"spa":"eng", eventTranslatorSelector, [selectedLanguage], true);
       let elem = document.createElement("option");
-      elem.textContent = Object.keys(LANGUAGES).find(key => LANGUAGES[key] === selectedLanguage);
+      elem.textContent = new Intl.DisplayNames([navigator.language], {type:'language'}).of(LANGUAGES[selectedLanguage]);
       source_sel.appendChild(elem);
 
       translator_input.textContent = output.textContent;
