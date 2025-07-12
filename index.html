@@ -11,9 +11,9 @@
   <div id="capturar">
     <h2 style="text-align: center;">OCR Image to Text</h2>
     <div class="fila-flex">
-      <div id="capture" class="container" style="padding: 25px; width: 59px; cursor: pointer;" title="Page capture">
+      <button id="capture" class="container action-icon" style="padding: 25px; width: 60px;  border:none;" title="Page capture">
         <span class="gg-screenshot" style="display: inline-block; --ggs:2;"></span>
-      </div>
+      </button>
       <div class="container" style="display: flex; align-items: center;
   justify-content: center;">
         <select id="langsel" style="display: inline-block; width: 150px; font-size: 16px; margin-top: 14px;"></select>
@@ -22,17 +22,18 @@
     <div class="container" style="height: 100px; background-color: #f9f9f9;">
       <img id="progress" src="images/arrow.png" style="max-height: 100px; max-width: 315px;">
     </div>
-    <div class="container" style="background-color: #ddd;">
+    <div class="container disabled-text">
       <div style="position: relative;">
         <textarea id="result" placeholder="No image text to extract" readonly
-          style="min-height: 100px; background-color: #ddd; color: #3c4043"></textarea>
+          style="min-height: 100px;" tabindex="-1"></textarea>
 
         <div class="text-actions">
-          <img id="translate-button" class="action-icon" title="Translate"
-            style="width: 20px; height:20px; margin-right: 6px; cursor:pointer; display: none;"
-            src="images/languages.svg">
-          <img id="clipboard-button" class="action-icon" title="Copy to clipboard" style="width: 20px; height:20px; cursor:pointer;"
-            src="images/clipboard-copy.svg">
+          <button id="translate-button" title="Translate" style="background: none; border: none; padding: 0; margin-right: 6px;  display: none;">
+            <img src="images/languages.svg" class="action-icon" alt="Translate" style="width: 20px; height: 20px;">
+          </button>
+          <button id="clipboard-button" title="Copy to clipboard" style="background: none; border: none; padding: 0; margin-right: 6px;">
+            <img src="images/clipboard-copy.svg"class="action-icon" alt="Copy to clipboard" style="width: 20px; height:20px;">
+          </button>
         </div>
       </div>
     </div>
@@ -61,8 +62,13 @@
 
       <textarea id="source-text" placeholder="No text extracted, go back and click capture..."></textarea>
     </div>
-    <div class="container" style="background-color: #ddd;">
-      <textarea id="translated-text" placeholder="Processing translation..." readonly style="background-color: #ddd; color: #3c4043"></textarea>
+    <div class="container disabled-text">
+      <textarea id="translated-text" placeholder="Processing translation..." readonly tabindex="-1"></textarea>
+      <div class="text-actions">
+          <button id="clipboard-translation-button" title="Copy to clipboard" style="background: none; border: none; padding: 0; margin-right: 20px;">
+            <img src="images/clipboard-copy.svg" class="action-icon" alt="Copy to clipboard" style="width: 20px; height:20px;">
+          </button>
+        </div>
     </div>
   </div>
 

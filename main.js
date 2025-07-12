@@ -265,6 +265,12 @@ document.addEventListener('DOMContentLoaded', async function() {
           await updateTranslation();
         }, 1000);
       });
+
+      const copy_translation_output = document.getElementById('clipboard-translation-button');
+      copy_translation_output.addEventListener('click', async ()=>{
+        await navigator.clipboard.writeText(translator_output.textContent);
+        showCopiedPopup();
+      })
       eventTranslatorSelector();
     })
   }
@@ -312,8 +318,8 @@ function showCopiedPopup() {
 
   popup.style.position = 'fixed';
   popup.style.left = '25%';
-  popup.style.bottom = '0px';
-  popup.style.transform = 'translateX(90%)';
+  popup.style.bottom = '5px';
+  popup.style.transform = 'translateX(-85%)';
   popup.style.background = '#323232';
   popup.style.color = '#fff';
   popup.style.padding = '8px 18px';
@@ -330,7 +336,7 @@ function showCopiedPopup() {
   // Forzar reflow para animar
   void popup.offsetWidth;
   popup.style.opacity = '1';
-  popup.style.bottom = '13px';
+  popup.style.bottom = '17px';
 
   // Ocultar y eliminar el popup después de 1.5 segundos
   setTimeout(() => {

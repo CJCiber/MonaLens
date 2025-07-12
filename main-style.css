@@ -142,6 +142,7 @@
     .action-icon {
       transition: background 0.2s, fill 0.2s;
       border-radius: 2px;
+      cursor: pointer;
     }
 
     .action-icon:hover {
@@ -149,7 +150,11 @@
       fill: #007cba;
     }
 
-    #capture:hover {
-      background: #f0f0f0;
-      fill: #007cba;
+    .disabled-text {
+      background-color: #ddd;
+    }
+
+    .disabled-text textarea{
+      background-color: #ddd;
+      color: #3c4043;
     }
