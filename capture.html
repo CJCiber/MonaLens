@@ -1,20 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Recorta la captura</title>
+    <title>Crop the screenshot</title>
     <style>
-        #captura {
-            cursor: crosshair;
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow: hidden;
         }
-
-        #captura img {
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+        #captura {
+            max-width: 100vw;
+            max-height: 100vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
             display: block;
+            box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+            cursor: crosshair;
+            user-select: none;
         }
     </style>
 </head>
 <body>
-<div id="captura" style="position: relative; display: inline-block;"></div>
-<div id="resultado"></div>
+<div id="img-div" style="position: relative; display: inline-block;">
+    <img id="captura" style="position: relative; display: inline-block;" draggable="false">
+</div>
 <script src="capture.js"></script>
 </body>
 </html>

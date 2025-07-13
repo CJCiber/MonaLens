@@ -43,24 +43,35 @@ button.addEventListener('click', function() {
         return tab;
       }
       const extensionUrl = chrome.runtime.getURL(filename);
-
       const [existingTab] = await chrome.tabs.query({url: extensionUrl});
+      const currentTab = await getCurrentTab();
+
+      if (currentTab.url === extensionUrl)
+        return false;
+
+      if (currentTab.incognito)
+        chrome.windows.create({
+          url: extensionUrl,
+          //incognito: true, esto hace que se bloquee por algún motivo
+          state: 'maximized'
+        });
+      else
+        await chrome.tabs.create({
+          url: extensionUrl, 
+          index: currentTab.index,  
+          active: true
+        });
+
+      //cerrar la pestaña que hubiese antes abierta
       if (existingTab)
         await chrome.tabs.remove(existingTab.id);
 
-
-      const currentTab = await getCurrentTab();    
-        
-      await chrome.tabs.create({
-        url: extensionUrl, 
-        index: currentTab.index,  
-        active: true 
-      });
-
+      return true;
     }
     await chrome.storage.session.set({ screenCapture: dataUrl });
     
-    await openUniqueExtensionTab("capture.html")
+    if (await openUniqueExtensionTab("capture.html"))
+      window.close();
   });
 });
 
