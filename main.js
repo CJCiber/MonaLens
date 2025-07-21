@@ -89,16 +89,16 @@ const LANGUAGES = {
 	ita: "it",
 	por: "pt",
 };
-function addLangSelector(domsel, selection, fun, disabled = [], unicode_values = false){ //disabled y selection deben estar en el formato OCR
+function addLangSelector(domsel, selection, fun, disabled = []){ //disabled y selection deben estar en el formato OCR
   Object.keys(LANGUAGES).forEach(function (key) {
 		let elem = document.createElement("option");
-		elem.value = unicode_values? LANGUAGES[key]:key;
+		elem.value = key;
     elem.textContent = new Intl.DisplayNames([navigator.language], {type:'language'}).of(LANGUAGES[key]);
     elem.disabled = disabled.includes(key); 
 		domsel.appendChild(elem);
   });
   
-  domsel.value = unicode_values? LANGUAGES[selection]:selection;
+  domsel.value = selection;
   domsel.addEventListener("change", fun);
 }
 async function eventMainSelector(){
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         popup.remove();
 
 
-      addLangSelector(input_sel, selectedLanguage=="eng"?"spa":"eng", eventTranslatorSelector, [selectedLanguage], true);
+      addLangSelector(input_sel, selectedLanguage=="eng"?"spa":"eng", eventTranslatorSelector, [selectedLanguage]);
       let elem = document.createElement("option");
       elem.textContent = new Intl.DisplayNames([navigator.language], {type:'language'}).of(LANGUAGES[selectedLanguage]);
       source_sel.appendChild(elem);
@@ -307,8 +307,8 @@ async function createTranslator() {
   }
     
 	translator = await Translator.create({
-		sourceLanguage: selectedLanguage,
-    targetLanguage: targetLanguage
+		sourceLanguage: LANGUAGES[selectedLanguage],
+    targetLanguage: LANGUAGES[targetLanguage]
 	});
 }
 
