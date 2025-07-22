@@ -100,3 +100,10 @@ async function endSelection(e) {
     const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
     await chrome.tabs.remove(tab.id);
 }
+
+function handleMessage(request, sender, sendResponse) {
+ if (request.action === "alert")
+    alert(request.data);
+}
+
+chrome.runtime.onMessage.addListener(handleMessage);

@@ -69,6 +69,12 @@ button.addEventListener('click', function() {
     
     if(await openUniqueExtensionTab("capture.html"))
       window.close();
+    else
+      chrome.runtime.sendMessage({
+        action: "alert",
+        data: "Screenshot already taken. Please select an area to extract text."
+      });
+      
   });
 });
 
