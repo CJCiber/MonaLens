@@ -1,22 +1,33 @@
 let isSelecting = false;
+let isExiting = false;
 let startX, startY, endX, endY;
 let selectionDiv = null;
 const imageElement = document.getElementById("captura");
 const imgDiv = document.getElementById("img-div");
+const cursor_exit = "url('images/exit_to_app.svg') 2 2, auto";
 
-(async () => {
-    const result = await chrome.storage.session.get(['screenCapture']);
-    
-    imageElement.src = result.screenCapture;
-    
-    // Eventos de selección
-    imageElement.addEventListener('mousedown', startSelection);
-    document.addEventListener('mousemove', updateSelection);
-    document.addEventListener('mouseup', endSelection);
-})();
+
+function handleMouseDown(e) {
+    e.preventDefault();
+    if (isSelecting || isExiting)
+        return;
+    if (e.target !== imageElement){
+        if(e.button !== 0)
+            return;
+
+        isExiting = true;
+
+        imageElement.style.cursor = "not-allowed";
+        document.addEventListener('mouseup', finishClickOutside);
+    }else{
+        startSelection(e); //isSelecting = true
+        document.body.style.cursor = "crosshair";
+        document.addEventListener('mousemove', updateSelection);
+        document.addEventListener('mouseup', endSelection);
+    }
+}
 
 function startSelection(e) {
-    e.preventDefault();
     isSelecting = true;
     
     const rect = imageElement.getBoundingClientRect();
@@ -37,9 +48,7 @@ function startSelection(e) {
     imgDiv.appendChild(selectionDiv);
 }
 
-function updateSelection(e) {
-    if (!isSelecting || !selectionDiv) return;
-    
+function updateSelection(e) {    
     const rect = imageElement.getBoundingClientRect();
     endX = e.clientX - rect.left;
     endY = e.clientY - rect.top;
@@ -57,16 +66,39 @@ function updateSelection(e) {
     selectionDiv.style.height = height + 'px';
 }
 
-async function endSelection(e) {
+async function closeCurrentTab(){
+    const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+    await chrome.tabs.remove(tab.id);
+}
+function abortSelection() {
     isSelecting = false;
-    if (!selectionDiv) {
-        alert('Click an area inside the image');
+    if (selectionDiv)
+        selectionDiv.remove();
+    selectionDiv = null;
+    startX = startY = endX = endY = null;
+    document.body.style.cursor = cursor_exit;
+    document.removeEventListener('mousemove',updateSelection);
+    document.removeEventListener('mouseup', endSelection);
+}
+
+async function endSelection(e) {
+    if (e.buttons !== 0)
+        return;
+
+    if (endX == null) // caso que no se llamó al updateSelection
+        await closeCurrentTab();
+
+    const sel_width = Math.abs(endX - startX);
+    const sel_height = Math.abs(endY - startY);
+    const min_pixels = 2;
+    if (sel_width <= min_pixels){
+        if(sel_height <= min_pixels)
+            await closeCurrentTab(); // dar un margen para cerrar
+        abortSelection();
         return;
     }
-    if (!endX){
-        selectionDiv.remove();
-        selectionDiv = null;
-        alert('Click and drag to make the selection');
+    if (sel_height <= min_pixels){
+        abortSelection();
         return;
     }
     
@@ -97,8 +129,19 @@ async function endSelection(e) {
     
     const croppedImageData = canvas.toDataURL('image/png');
     await chrome.storage.session.set({ OCRImage: croppedImageData });
-    const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-    await chrome.tabs.remove(tab.id);
+    await closeCurrentTab();
+}
+
+async function finishClickOutside(e) {
+    if (e.button !== 0)
+        return;
+    if (e.target !== imageElement)
+        await closeCurrentTab();
+    
+    isExiting = false;
+
+    imageElement.style.cursor = "crosshair";
+    document.removeEventListener('mouseup', finishClickOutside);
 }
 
 function handleMessage(request, sender, sendResponse) {
@@ -106,4 +149,17 @@ function handleMessage(request, sender, sendResponse) {
     alert(request.data);
 }
 
+
+// Init
+(async () => {
+    const result = await chrome.storage.session.get(['screenCapture']);
+    imageElement.src = result.screenCapture;
+
+    document.addEventListener('mousedown', handleMouseDown);
+})();
+document.addEventListener('contextmenu', function(event) { event.preventDefault();}); //Deshabilitar context menu
 chrome.runtime.onMessage.addListener(handleMessage);
+window.addEventListener('resize', () => {
+    if (isSelecting)
+        abortSelection();
+});
