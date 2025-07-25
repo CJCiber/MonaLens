@@ -5,6 +5,7 @@ let selectionDiv = null;
 const imageElement = document.getElementById("captura");
 const imgDiv = document.getElementById("img-div");
 const cursor_exit = "url('images/exit_to_app.svg') 2 2, auto";
+let return_window;
 
 
 function handleMouseDown(e) {
@@ -66,10 +67,14 @@ function updateSelection(e) {
     selectionDiv.style.height = height + 'px';
 }
 
-async function closeCurrentTab(){
-    const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+async function closeCurrentTab() {
+    if (return_window != null)
+        await chrome.windows.update(return_window, { focused: true });//Cambia el foco antes de que desaparezca
+
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     await chrome.tabs.remove(tab.id);
 }
+
 function abortSelection() {
     isSelecting = false;
     if (selectionDiv)
@@ -144,18 +149,65 @@ async function finishClickOutside(e) {
     document.removeEventListener('mouseup', finishClickOutside);
 }
 
+
 function handleMessage(request, sender, sendResponse) {
  if (request.action === "alert")
     alert(request.data);
 }
 
 
+let interval_id;
+function createInterval() {
+    const INTERVAL = 2000;
+    const checkWindowStillActive = async () => {
+        let current_window = await chrome.windows.getCurrent();
+
+        if (!current_window.focused) {
+            let windows = await chrome.windows.getAll();
+            let focusedWindow = windows.find(win => win.focused); //Buscar ventana con foco verdadero
+
+            // Si no hay ventana enfocada, es posible que sea la del popup, no se cancela. Si no es normal, tampoco
+            if (!focusedWindow || focusedWindow.type !== "normal")
+                return;
+
+            cancelReturn();
+        }
+    }
+
+    interval_id = setInterval(checkWindowStillActive, INTERVAL);
+}
+function clearClock() {
+    clearInterval(interval_id);
+}
+function cancelReturn() {
+    document.removeEventListener('visibilitychange', cancelReturn);
+    window.removeEventListener('blur', cancelReturn);
+    window.removeEventListener('focus', clearClock);
+    clearClock();
+
+    return_window = null;
+    console.log("Previous window will no longer be reopened");
+};
+function visibilityCancelReturn() {
+    if(document.visibilityState === "hidden")
+        cancelReturn();
+}
+
+
 // Init
 (async () => {
-    const result = await chrome.storage.session.get(['screenCapture']);
-    imageElement.src = result.screenCapture;
+    const result = await chrome.storage.session.get(['screenCapture', 'focus']);
 
+    imageElement.src = result.screenCapture;
     document.addEventListener('mousedown', handleMouseDown);
+
+    return_window = result.focus;
+    if (return_window) {
+        console.log("A return_window was found");
+        document.addEventListener('visibilitychange', visibilityCancelReturn);
+        window.addEventListener('blur', createInterval);
+        window.addEventListener('focus', clearClock);
+    }
 })();
 document.addEventListener('contextmenu', function(event) { event.preventDefault();}); //Deshabilitar context menu
 chrome.runtime.onMessage.addListener(handleMessage);

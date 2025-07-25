@@ -35,13 +35,13 @@ async function createWorker(logger = (m) => {console.log(m);}) {
 
 button.addEventListener('click', function() {
   chrome.tabs.captureVisibleTab(null, { format: "png" }, async function(dataUrl) {
-    
-    async function openUniqueExtensionTab(filename) {
       async function getCurrentTab() {
         let queryOptions = { active: true, lastFocusedWindow: true };
         let [tab] = await chrome.tabs.query(queryOptions);
         return tab;
       }
+    
+    async function openUniqueExtensionTab(filename) {
       const extensionUrl = chrome.runtime.getURL(filename);
       const [existingTab] = await chrome.tabs.query({url: extensionUrl});
       const currentTab = await getCurrentTab();
@@ -65,7 +65,11 @@ button.addEventListener('click', function() {
       
       return true;
     }
-    await chrome.storage.session.set({ screenCapture: dataUrl });
+
+    const current_window = await chrome.windows.getLastFocused();
+
+    const saved_data = { screenCapture: dataUrl, focus: current_window.incognito? current_window.id:null };
+    await chrome.storage.session.set(saved_data);
     
     if(await openUniqueExtensionTab("capture.html"))
       window.close();
@@ -108,7 +112,6 @@ function addLangSelector(domsel, selection, fun, disabled = []){ //disabled y se
   domsel.addEventListener("change", fun);
 }
 async function eventMainSelector(){
-  console.log("hoal")
   langsel.disabled = true;
   selectedLanguage = langsel.value;
 
@@ -213,7 +216,6 @@ async function processImage(){
       }
     };
     // Empezar flood fill desde todos los bordes
-    console.log("Iniciando flood fill desde los bordes...");
     for (let x = 0; x < width; x++) {
       if (isBlack(x, 0)) floodFill(x, 0);           // Borde superior
       if (isBlack(x, height - 1)) floodFill(x, height - 1); // Borde inferior
@@ -252,7 +254,6 @@ async function updateText(){
 document.addEventListener('DOMContentLoaded', async function() {
   const result = await chrome.storage.session.get(['lang']);
   selectedLanguage = result.lang || "jpn";
-  console.log(result);
   addLangSelector(langsel, selectedLanguage, eventMainSelector);
   if ("Translator" in window){
     const transl_button = document.getElementById("translate-button");
