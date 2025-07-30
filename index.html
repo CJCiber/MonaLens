@@ -11,7 +11,7 @@
   <div id="capturar">
     <div style="display: inline-block; vertical-align: middle;">
       <img src="images/title_dibujo.svg" style="max-height: 55px; vertical-align: middle;">
-      <h2 style="display: inline-block; vertical-align: bottom; margin-bottom: 3px; margin-left: 10px; font-size: 18px;">OCR Image to Text</h2>
+      <h2 style="display: inline-block; vertical-align: bottom; margin-bottom: 3px; margin-left: 10px; font-size: 18px;" data-i18n="IndexTitle">OCR Image to Text</h2>
     </div>
     <div class="fila-flex">
       <button id="capture" class="container action-icon" style="padding: 25px; width: 60px;  border:none;" title="Page capture">
@@ -27,7 +27,7 @@
     </div>
     <div class="container disabled-text">
       <div style="position: relative;">
-        <textarea id="result" placeholder="No image text to extract" readonly
+        <textarea id="result" data-i18n-placeholder="NoImageText" readonly
           style="min-height: 100px;" tabindex="-1"></textarea>
 
         <div class="text-actions">
@@ -45,9 +45,14 @@
   <!-- Página de traducciones -->
   <div id="traducir" style="display: none;">
     <div class="container big">
-      <div style="display: flex; align-items: center; margin-bottom: -5px;">
-        <h2 style="font-size: 16px; margin: 0 16px 0 0; font-size: 16px;">Translate extracted text</h2>
-        <img src="images/dibujo48.png" style="height:40px; transform: translate(56px, 17px);">
+      <div style="display: flex; align-items: center; margin-bottom: 12px;">
+        <h2 style="font-size: 16px; margin: 0 16px 0 0; font-size: 16px;" data-i18n="TranslationTitle">Translate extracted text</h2>
+        <img src="images/dibujo48.png" style="
+          position: absolute;
+          right: 20px;
+          top: 50px;
+          transform: translateY(-30%);
+        ">
       </div>
 
       <select id="source-lang" disabled>
@@ -61,10 +66,10 @@
 
     <div class="container">
 
-      <textarea id="source-text" spellcheck="false" placeholder="No text extracted, go back and click capture..."></textarea>
+      <textarea id="source-text" spellcheck="false" data-i18n-placeholder="NoTranslationInput"></textarea>
     </div>
     <div class="container disabled-text">
-      <textarea id="translated-text" placeholder="Processing translation..." readonly tabindex="-1"></textarea>
+      <textarea id="translated-text" data-i18n-placeholder="NoTranslationOutput" readonly tabindex="-1"></textarea>
       <div class="text-actions">
           <button id="clipboard-translation-button" title="Copy to clipboard" style="background: none; border: none; padding: 0; margin-right: 20px;">
             <img src="images/clipboard-copy.svg" class="action-icon" alt="Copy to clipboard" style="width: 20px; height:20px;">

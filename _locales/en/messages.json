@@ -1,0 +1,23 @@
+{
+    "CaptureInstructions":{
+        "message":"Screenshot already taken. Please select an area to extract text."
+    },
+    "NoImageText":{
+        "message": "No image text to extract"
+    },
+    "NoTranslationInput":{
+        "message":"No text extracted, go back and click capture..."
+    },
+    "NoTranslationOutput":{
+        "message":"Processing translation"
+    },
+    "IndexTitle": {
+        "message": "OCR Image to Text"
+    },
+    "TranslationTitle": {
+        "message":"Translate extracted text"
+    },
+    "CapturePageTitle":{
+        "message": "MonaLens - Crop the screenshot"
+    }
+}

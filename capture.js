@@ -196,6 +196,8 @@ function visibilityCancelReturn() {
 
 // Init
 (async () => {
+    document.title = chrome.i18n.getMessage("CapturePageTitle");
+
     const result = await chrome.storage.session.get(['screenCapture', 'focus']);
 
     imageElement.src = result.screenCapture;

@@ -1,0 +1,23 @@
+{
+    "CaptureInstructions":{
+        "message":"Ya ha tomado la captura. Por favor, seleccione el área para extraer texto. "
+    },
+    "NoImageText":{
+        "message": "No hay texto que extraer"
+    },
+    "NoTranslationInput":{
+        "message":"No hay texto para traducir, vuelva a la primera pantalla y dele a capturar..."
+    },
+    "NoTranslationOutput":{
+        "message":"Procesando el texto a traducir"
+    },
+    "IndexTitle": {
+        "message": "OCR Imagen a Texto"
+    },
+    "TranslationTitle": {
+        "message":"Traduce el texto extraido"
+    },
+    "CapturePageTitle":{
+        "message": "MonaLens - Recortar captura"
+    }
+}

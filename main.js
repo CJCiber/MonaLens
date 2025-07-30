@@ -76,7 +76,7 @@ button.addEventListener('click', function() {
     else
       chrome.runtime.sendMessage({
         action: "alert",
-        data: "Screenshot already taken. Please select an area to extract text."
+        data: chrome.i18n.getMessage("captureInstructions")
       });
       
   });
@@ -103,7 +103,7 @@ function addLangSelector(domsel, selection, fun, disabled = []){ //disabled y se
   Object.keys(LANGUAGES).forEach(function (key) {
 		let elem = document.createElement("option");
 		elem.value = key;
-    elem.textContent = new Intl.DisplayNames([navigator.language], {type:'language'}).of(LANGUAGES[key]);
+    elem.textContent = new Intl.DisplayNames([chrome.i18n.getUILanguage()], {type:'language'}).of(LANGUAGES[key]);
     elem.disabled = disabled.includes(key); 
 		domsel.appendChild(elem);
   });
@@ -252,6 +252,16 @@ async function updateText(){
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
+  // Primero, cargar las traducciones
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const msg = el.getAttribute('data-i18n-placeholder');
+    el.placeholder = chrome.i18n.getMessage(msg);
+  });
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const msg = el.getAttribute('data-i18n');
+    el.textContent = chrome.i18n.getMessage(msg);
+  });
+
   const result = await chrome.storage.session.get(['lang']);
   selectedLanguage = result.lang || "jpn";
   addLangSelector(langsel, selectedLanguage, eventMainSelector);
@@ -269,7 +279,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
       addLangSelector(input_sel, selectedLanguage=="eng"?"spa":"eng", eventTranslatorSelector, [selectedLanguage]);
       let elem = document.createElement("option");
-      elem.textContent = new Intl.DisplayNames([navigator.language], {type:'language'}).of(LANGUAGES[selectedLanguage]);
+      elem.textContent = new Intl.DisplayNames([chrome.i18n.getUILanguage()], {type:'language'}).of(LANGUAGES[selectedLanguage]);
       source_sel.appendChild(elem);
 
       translator_input.textContent = output.textContent;
