@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "description": "Captura el texto de imágenes",
+    "description": "Capture text from images and translate it.",
     "name": "MonaLens",
     "version": "0.6.3",
     "icons": {
