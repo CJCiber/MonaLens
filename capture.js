@@ -38,8 +38,8 @@ function startSelection(e) {
     // Crear div de selección
     selectionDiv = document.createElement('div');
     selectionDiv.style.position = 'absolute';
-    selectionDiv.style.border = '.5px dashed #007cba';
-    selectionDiv.style.backgroundColor = 'rgba(0, 124, 186, 0.1)';
+    selectionDiv.style.border = '.5px dashed #ba0000ff';
+    selectionDiv.style.backgroundColor = 'rgba(186, 28, 0, 0.1)';
     selectionDiv.style.left = startX + 'px';
     selectionDiv.style.top = startY + 'px';
     selectionDiv.style.width = '0px';

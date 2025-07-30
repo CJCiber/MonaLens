@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "description": "Captura el texto de imágenes",
     "name": "MonaLens",
-    "version": "0.6.2",
+    "version": "0.6.3",
     "icons": {
 		"16": "images/dibujo16.png",
 		"32": "images/dibujo32.png",
