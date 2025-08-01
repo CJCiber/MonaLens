@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "description": "Capture text from images using the screenshot functionality and translate it✨",
     "name": "MonaLens: extract text from images",
-    "version": "0.6.4",
+    "version": "0.6.5",
     "icons": {
 		"16": "images/dibujo16.png",
 		"32": "images/dibujo32.png",

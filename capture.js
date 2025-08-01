@@ -38,14 +38,14 @@ function startSelection(e) {
     // Crear div de selección
     selectionDiv = document.createElement('div');
     selectionDiv.style.position = 'absolute';
-    selectionDiv.style.border = '2px dashed white';
-    selectionDiv.style.mixBlendMode = 'difference';
-    selectionDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+    selectionDiv.style.border = '1px dashed #007cba';
+    selectionDiv.style.backgroundColor = 'rgba(0, 247, 255, 0.27)';
     selectionDiv.style.left = startX + 'px';
     selectionDiv.style.top = startY + 'px';
     selectionDiv.style.width = '0px';
     selectionDiv.style.height = '0px';
     selectionDiv.style.pointerEvents = 'none';
+    selectionDiv.style.cursor = "crosshair";
     
     imgDiv.appendChild(selectionDiv);
 }
@@ -57,7 +57,7 @@ function updateSelection(e) {
     endX = Math.min(Math.max(0,endX), rect.width);
     endY = Math.min(Math.max(0,endY), rect.height);
     
-    const width = Math.min(Math.abs(endX - startX));
+    const width = Math.abs(endX - startX);
     const height = Math.abs(endY - startY);
     const left = Math.min(startX, endX);
     const top = Math.min(startY, endY);
@@ -91,15 +91,19 @@ async function endSelection(e) {
     if (e.buttons !== 0)
         return;
 
-    if (endX == null) // caso que no se llamó al updateSelection
+    if (endX == null) { // caso que no se llamó al updateSelection
         await closeCurrentTab();
+        return;
+    }
 
     const sel_width = Math.abs(endX - startX);
     const sel_height = Math.abs(endY - startY);
     const min_pixels = 2;
     if (sel_width <= min_pixels){
-        if(sel_height <= min_pixels)
+        if(sel_height <= min_pixels){
             await closeCurrentTab(); // dar un margen para cerrar
+            return;
+        }
         abortSelection();
         return;
     }
