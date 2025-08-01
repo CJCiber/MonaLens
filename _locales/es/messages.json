@@ -19,5 +19,14 @@
     },
     "CapturePageTitle":{
         "message": "MonaLens - Recortar captura"
+    },
+    "HintCaptureButton":{
+        "message": "Capturar"
+    },
+    "HintTranslateButton":{
+        "message": "Traducir"
+    },
+    "HintClipboardButton":{
+        "message": "Copiar al portapapeles"
     }
 }

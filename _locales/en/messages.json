@@ -19,5 +19,14 @@
     },
     "CapturePageTitle":{
         "message": "MonaLens - Crop the screenshot"
+    },
+    "HintCaptureButton":{
+        "message": "Page capture"
+    },
+    "HintTranslateButton":{
+        "message": "Translate"
+    },
+    "HintClipboardButton":{
+        "message": "Copy to clipboard"
     }
 }

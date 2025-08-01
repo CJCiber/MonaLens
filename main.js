@@ -261,6 +261,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     const msg = el.getAttribute('data-i18n');
     el.textContent = chrome.i18n.getMessage(msg);
   });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const msg = el.getAttribute('data-i18n-title');
+    el.title = chrome.i18n.getMessage(msg);
+  });
 
   const result = await chrome.storage.session.get(['lang']);
   selectedLanguage = result.lang || "jpn";
